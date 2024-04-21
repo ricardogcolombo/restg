@@ -2,7 +2,7 @@ class ActivityUrlParametersBuilder {
   private url: string;
 
   constructor() {
-    this.url = '?';
+    this.url = 'http://www.boredapi.com/api/activity?';
   }
 
   setKey(key: string | undefined) {
