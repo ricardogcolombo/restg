@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import Logger from './logger';
 import { ActivityUrlParametersBuilder } from './ActivityUrlParametersBuilder';
-import { Activity, BoredActivity, AccessibilityLevel, PriceCategory } from './entities';
+
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -19,6 +19,40 @@ app.use(express.json());
 const router = Router();
 
 app.use('/api/v1', router);
+
+// type urlParamsType = ;
+//
+// interface activityQueryParams {
+//   key: urlParamsType;
+//   type: urlParamsType;
+//   participants: urlParamsType;
+//   price: urlParamsType;
+//   minprice: urlParamsType;
+//   maxprice: urlParamsType;
+//   accessibility: urlParamsType;
+//   maxaccesibility: urlParamsType;
+//   minaccesibility: urlParamsType;
+// }
+
+interface BoredActivity {
+  activity: string;
+  accessibility: number;
+  type: string;
+  participants: number;
+  price: number;
+  link: string;
+  key: string;
+}
+
+interface Activity {
+  activity: string;
+  accessibility: string;
+  type: string;
+  participants: number;
+  price: string;
+  link: string;
+  key: string;
+}
 
 const validatedActivityParams = (params: any): void => {
   const { key, type, participants, price, minprice, maxprice, accessibility, maxaccesibility, minaccesibility } = params;
@@ -42,14 +76,20 @@ const getActivityQueryParams = (params: any): string => {
   return queryParams.getUrl();
 };
 
+enum accesibilityLevels {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW'
+}
+
 const mapBoredAccessibility = (accessibility: number): string => {
   let accessibilityLevel: string;
   if (accessibility <= 0.25) {
-    accessibilityLevel = AccessibilityLevel.HIGH;
+    accessibilityLevel = 'HIGH';
   } else if (accessibility <= 0.75) {
-    accessibilityLevel = AccessibilityLevel.MEDIUM;
+    accessibilityLevel = 'MEDIUM';
   } else {
-    accessibilityLevel = AccessibilityLevel.LOW;
+    accessibilityLevel = 'LOW';
   }
   return accessibilityLevel;
 };
@@ -58,11 +98,11 @@ const mapBoredPrice = (price: number): string => {
   let priceLevel: string;
 
   if ((price = 0)) {
-    priceLevel = PriceCategory.FREE;
+    priceLevel = 'FREE';
   } else if (price <= 0.5) {
-    priceLevel = PriceCategory.LOW;
+    priceLevel = 'LOW';
   } else {
-    priceLevel = PriceCategory.HIGH;
+    priceLevel = 'HIGH';
   }
   return priceLevel;
 };
