@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-import Logger from '../src/Logger'; // Assuming Logger file is in the same directory
+import Logger, { colors } from '../src/Logger'; // Assuming Logger file is in the same directory
 
 describe('Logger', () => {
   it('should initialize correctly', () => {
@@ -42,7 +42,7 @@ describe('Logger', () => {
       http: 3,
       debug: 4
     });
-    expect(Logger.colors).toEqual({
+    expect(colors).toEqual({
       error: 'red',
       warn: 'yellow',
       info: 'green',

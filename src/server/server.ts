@@ -3,9 +3,9 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
-import Logger from './helpers/Logger';
-import { ActivityUrlParametersBuilder } from './domain/ActivityUrlParametersBuilder';
-import { Activity, BoredActivity, AccessibilityLevel, PriceCategory } from './helpers/Entities';
+import Logger from './Logger';
+import { ActivityUrlParametersBuilder } from './ActivityUrlParametersBuilder';
+
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -19,6 +19,26 @@ app.use(express.json());
 const router = Router();
 
 app.use('/api/v1', router);
+
+interface BoredActivity {
+  activity: string;
+  accessibility: number;
+  type: string;
+  participants: number;
+  price: number;
+  link: string;
+  key: string;
+}
+
+interface Activity {
+  activity: string;
+  accessibility: string;
+  type: string;
+  participants: number;
+  price: string;
+  link: string;
+  key: string;
+}
 
 const validatedActivityParams = (params: any): void => {
   const { key, type, participants, price, minprice, maxprice, accessibility, maxaccesibility, minaccesibility } = params;
@@ -42,14 +62,20 @@ const getActivityQueryParams = (params: any): string => {
   return queryParams.getUrl();
 };
 
+enum accesibilityLevels {
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW'
+}
+
 const mapBoredAccessibility = (accessibility: number): string => {
   let accessibilityLevel: string;
   if (accessibility <= 0.25) {
-    accessibilityLevel = AccessibilityLevel.HIGH;
+    accessibilityLevel = 'HIGH';
   } else if (accessibility <= 0.75) {
-    accessibilityLevel = AccessibilityLevel.MEDIUM;
+    accessibilityLevel = 'MEDIUM';
   } else {
-    accessibilityLevel = AccessibilityLevel.LOW;
+    accessibilityLevel = 'LOW';
   }
   return accessibilityLevel;
 };
@@ -58,11 +84,11 @@ const mapBoredPrice = (price: number): string => {
   let priceLevel: string;
 
   if ((price = 0)) {
-    priceLevel = PriceCategory.FREE;
+    priceLevel = 'FREE';
   } else if (price <= 0.5) {
-    priceLevel = PriceCategory.LOW;
+    priceLevel = 'LOW';
   } else {
-    priceLevel = PriceCategory.HIGH;
+    priceLevel = 'HIGH';
   }
   return priceLevel;
 };
