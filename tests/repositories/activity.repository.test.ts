@@ -1,10 +1,10 @@
-import { ActivityUrlParametersBuilder } from '../src/ActivityUrlParametersBuilder';
+import { ActivityRepository } from '../../src/repositories/activity.repository';
 
 describe('ActivityUrlParametersBuilder', () => {
-  let builder: ActivityUrlParametersBuilder;
+  let builder: ActivityRepository;
 
   beforeEach(() => {
-    builder = new ActivityUrlParametersBuilder();
+    builder = new ActivityRepository();
   });
 
   describe('setKey', () => {
@@ -170,7 +170,7 @@ describe('ActivityUrlParametersBuilder', () => {
     });
   });
   it('should build a valid URL with multiple parameters', () => {
-    const builder = new ActivityUrlParametersBuilder();
+    const builder = new ActivityRepository();
 
     const url = builder
       .setKey('exampleKey')
@@ -185,7 +185,7 @@ describe('ActivityUrlParametersBuilder', () => {
       .getUrl();
 
     expect(url).toBe(
-      '?key=exampleKey&type=education&participants=1&price=0&minprice=0&maxprice=1&accessibility=0.1&maxaccessibility=0.5&minaccessibility=0'
+      'http://www.boredapi.com/api/activity?key=exampleKey&type=education&participants=1&price=0&minprice=0&maxprice=1&accessibility=0.1&maxaccessibility=0.5&minaccessibility=0'
     );
   });
 });

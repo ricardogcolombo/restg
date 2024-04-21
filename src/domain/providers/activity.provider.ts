@@ -45,7 +45,7 @@ class ActivityProvider {
     const { key, type, participants, price, minprice, maxprice, accessibility, maxaccesibility, minaccesibility } = req.params;
     const activityRepository = new ActivityRepository();
 
-    let activities = await activityRepository
+    let activity = await activityRepository
       .setKey(key)
       .setType(type)
       .setParticipants(participants)
@@ -57,7 +57,7 @@ class ActivityProvider {
       .setMinAccessibility(minaccesibility)
       .getActivity();
 
-    res.json(activities.map(this.mapBoredActivityToActivity));
+    res.json(this.mapBoredActivityToActivity(activity));
   }
 }
 

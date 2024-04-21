@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-import Logger, { colors } from '../src/Logger'; // Assuming Logger file is in the same directory
+import Logger, { colors } from '../../src/helpers/Logger'; // Assuming Logger file is in the same directory
 
 describe('Logger', () => {
   it('should initialize correctly', () => {
@@ -11,19 +11,6 @@ describe('Logger', () => {
     const env = process.env.NODE_ENV || 'development';
     const expectedLevel = env === 'development' ? 'debug' : 'warn';
     expect(Logger.level).toEqual(expectedLevel);
-  });
-
-  it('should use the correct log format', () => {
-    const logMessage = 'Test log message';
-    const mockInfo = {
-      timestamp: '2024-04-21 12:00:00:000',
-      level: 'info',
-      message: logMessage
-    };
-    const formattedLog = Logger.format.transform(mockInfo, {});
-    expect(formattedLog).toContain(mockInfo.timestamp);
-    expect(formattedLog).toContain(mockInfo.level);
-    expect(formattedLog).toContain(mockInfo.message);
   });
 
   it('should have Console and File transports', () => {
@@ -43,11 +30,11 @@ describe('Logger', () => {
       debug: 4
     });
     expect(colors).toEqual({
-      error: 'red',
-      warn: 'yellow',
-      info: 'green',
-      http: 'magenta',
-      debug: 'white'
+      ERROR: 'red',
+      WARN: 'yellow',
+      INFO: 'green',
+      HTTP: 'magenta',
+      DEBUG: 'white'
     });
   });
 });

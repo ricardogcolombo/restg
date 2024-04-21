@@ -7,9 +7,12 @@ class ActivityRepository {
     this.url = 'http://www.boredapi.com/api/activity?';
   }
 
+  private lastUrlCharIsQueryStringSeparator() {
+    return this.url[this.url.length - 1] === '?';
+  }
   setKey(key: string | undefined) {
     if (!key) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `key=${key}`;
     } else {
       this.url = this.url + `&key=${key}`;
@@ -19,7 +22,7 @@ class ActivityRepository {
 
   setType(type: string | undefined) {
     if (!type) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `type=${type}`;
     } else {
       this.url = this.url + `&type=${type}`;
@@ -29,7 +32,7 @@ class ActivityRepository {
   }
   setParticipants(participants: string | undefined) {
     if (!participants) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `participants=${participants}`;
     } else {
       this.url = this.url + `&participants=${participants}`;
@@ -39,7 +42,7 @@ class ActivityRepository {
   }
   setPrice(price: string | undefined) {
     if (!price) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `price=${price}`;
     } else {
       this.url = this.url + `&price=${price}`;
@@ -49,7 +52,7 @@ class ActivityRepository {
   }
   setMinPrice(minprice: string | undefined) {
     if (!minprice) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `minprice=${minprice}`;
     } else {
       this.url = this.url + `&minprice=${minprice}`;
@@ -59,7 +62,7 @@ class ActivityRepository {
   }
   setMaxPrice(maxprice: string | undefined) {
     if (!maxprice) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `maxprice=${maxprice}`;
     } else {
       this.url = this.url + `&maxprice=${maxprice}`;
@@ -69,7 +72,7 @@ class ActivityRepository {
 
   setAccessibility(accessibility: string | undefined) {
     if (!accessibility) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `accessibility=${accessibility}`;
     } else {
       this.url = this.url + `&accessibility=${accessibility}`;
@@ -78,7 +81,7 @@ class ActivityRepository {
   }
   setMaxAccessibility(maxaccessibility: string | undefined) {
     if (!maxaccessibility) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `maxaccessibility=${maxaccessibility}`;
     } else {
       this.url = this.url + `&maxaccessibility=${maxaccessibility}`;
@@ -88,7 +91,7 @@ class ActivityRepository {
   }
   setMinAccessibility(minaccessibility: string | undefined) {
     if (!minaccessibility) return this;
-    if (this.url.length === 1) {
+    if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `minaccessibility=${minaccessibility}`;
     } else {
       this.url = this.url + `&minaccessibility=${minaccessibility}`;
@@ -102,16 +105,16 @@ class ActivityRepository {
     this.url = '';
   }
   async getActivity() {
-    let activities;
+    let activity;
     try {
       Logger.info(`calling ${this.url}`);
-      activities = await fetch(this.url).then((activity) => activity.json());
+      activity = await fetch(this.url).then((response) => response.json());
     } catch (error) {
       Logger.error('Failed to fetch from boredapi/activity');
       throw error;
     }
 
-    return activities;
+    return activity;
   }
 }
 
