@@ -1,4 +1,6 @@
-class ActivityUrlParametersBuilder {
+import Logger from '../helpers/Logger';
+
+class ActivityRepository {
   private url: string;
 
   constructor() {
@@ -96,6 +98,21 @@ class ActivityUrlParametersBuilder {
   getUrl() {
     return this.url;
   }
+  reset() {
+    this.url = '';
+  }
+  async getActivity() {
+    let activities;
+    try {
+      Logger.info(`calling ${this.url}`);
+      activities = await fetch(this.url).then((activity) => activity.json());
+    } catch (error) {
+      Logger.error('Failed to fetch from boredapi/activity');
+      throw error;
+    }
+
+    return activities;
+  }
 }
 
-export { ActivityUrlParametersBuilder };
+export { ActivityRepository };

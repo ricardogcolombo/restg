@@ -1,6 +1,6 @@
 import { Router, Express } from 'express';
-import getActivity from '../domain/providers/activity.provider';
 import Logger from '../helpers/Logger';
+import { getActivityProvider } from '../domain/providers/activity.provider';
 
 const router = Router();
 
@@ -10,7 +10,7 @@ const badRequestError = () => {
 };
 
 // router.all('*', badRequestError);
-router.get('/activity', getActivity);
+router.get('/activity', getActivityProvider);
 const attachActivityRoutes = (app: Express) => {
   app.use('/api/v1', router);
 };

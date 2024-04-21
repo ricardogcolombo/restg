@@ -1,79 +1,69 @@
-import { Request, Response } from 'express';
+import { Request, Response, Handler } from 'express';
 
-import { ActivityUrlParametersBuilder } from '../../repositories/ActivityUrlParametersBuilder.repository';
+import { ActivityRepository } from '../../repositories/activity.repository';
 import { AccessibilityLevel, Activity, BoredActivity, PriceCategory } from '../entities/activity.entities';
 import Logger from '../../helpers/Logger';
 
-const mapBoredAccessibility = (accessibility: number): string => {
-  let accessibilityLevel: string;
-  if (accessibility <= 0.25) {
-    accessibilityLevel = AccessibilityLevel.HIGH;
-  } else if (accessibility <= 0.75) {
-    accessibilityLevel = AccessibilityLevel.MEDIUM;
-  } else {
-    accessibilityLevel = AccessibilityLevel.LOW;
-  }
-  return accessibilityLevel;
-};
-
-const mapBoredPrice = (price: number): string => {
-  let priceLevel: string;
-
-  if ((price = 0)) {
-    priceLevel = PriceCategory.FREE;
-  } else if (price <= 0.5) {
-    priceLevel = PriceCategory.LOW;
-  } else {
-    priceLevel = PriceCategory.HIGH;
-  }
-  return priceLevel;
-};
-
-const getActivityQueryParams = (params: any): string => {
-  const { key, type, participants, price, minprice, maxprice, accessibility, maxaccesibility, minaccesibility } = params;
-  const queryParams = new ActivityUrlParametersBuilder();
-
-  queryParams
-    .setKey(key)
-    .setType(type)
-    .setParticipants(participants)
-    .setPrice(price)
-    .setMinPrice(minprice)
-    .setMaxPrice(maxprice)
-    .setAccessibility(accessibility)
-    .setMaxAccessibility(maxaccesibility)
-    .setMinAccessibility(minaccesibility);
-
-  return queryParams.getUrl();
-};
-
-const mapBoredActivityToActivity = (activity: BoredActivity): Activity => {
-  const accessibility: string = mapBoredAccessibility(activity.accessibility);
-  const price: string = mapBoredPrice(activity.price);
-
-  return {
-    ...activity,
-    accessibility,
-    price
-  };
-};
-
-const getActivity = async (req: Request, res: Response) => {
-  const url = getActivityQueryParams(req.query);
-
-  let activities;
-
-  try {
-    Logger.info(`calling ${url}`);
-    activities = await fetch(url)
-      .then((activity) => activity.json())
-      .then(mapBoredActivityToActivity);
-  } catch (error) {
-    Logger.error('Failed to fetch from boredapi/activity');
-    throw error;
+class ActivityProvider {
+  private mapBoredAccessibility(accessibility: number): string {
+    let accessibilityLevel: string;
+    if (accessibility <= 0.25) {
+      accessibilityLevel = AccessibilityLevel.HIGH;
+    } else if (accessibility <= 0.75) {
+      accessibilityLevel = AccessibilityLevel.MEDIUM;
+    } else {
+      accessibilityLevel = AccessibilityLevel.LOW;
+    }
+    return accessibilityLevel;
   }
 
-  res.json(activities);
+  private mapBoredPrice(price: number): string {
+    let priceLevel: string;
+
+    if ((price = 0)) {
+      priceLevel = PriceCategory.FREE;
+    } else if (price <= 0.5) {
+      priceLevel = PriceCategory.LOW;
+    } else {
+      priceLevel = PriceCategory.HIGH;
+    }
+    return priceLevel;
+  }
+
+  private mapBoredActivityToActivity(activity: BoredActivity): Activity {
+    const accessibility: string = this.mapBoredAccessibility(activity.accessibility);
+    const price: string = this.mapBoredPrice(activity.price);
+
+    return {
+      ...activity,
+      accessibility,
+      price
+    };
+  }
+
+  async getActivity(req: Request, res: Response) {
+    const { key, type, participants, price, minprice, maxprice, accessibility, maxaccesibility, minaccesibility } = req.params;
+    const activityRepository = new ActivityRepository();
+
+    let activities = await activityRepository
+      .setKey(key)
+      .setType(type)
+      .setParticipants(participants)
+      .setPrice(price)
+      .setMinPrice(minprice)
+      .setMaxPrice(maxprice)
+      .setAccessibility(accessibility)
+      .setMaxAccessibility(maxaccesibility)
+      .setMinAccessibility(minaccesibility)
+      .getActivity();
+
+    res.json(activities.map(this.mapBoredActivityToActivity));
+  }
+}
+
+const provider = new ActivityProvider();
+const getActivityProvider = (req: Request, res: Response) => {
+  return provider.getActivity(req, res);
 };
 
-export default getActivity;
+export { getActivityProvider };
