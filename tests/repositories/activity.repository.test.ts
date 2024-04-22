@@ -1,6 +1,6 @@
 import { ActivityRepository } from '../../src/repositories/activity.repository';
 
-describe('ActivityUrlParametersBuilder', () => {
+describe('ActivityRepository', () => {
   let builder: ActivityRepository;
 
   beforeEach(() => {

@@ -101,7 +101,11 @@ class ActivityProvider {
 
       let activity = await activityRepository.getActivity();
 
-      res.json(this.mapBoredActivityToActivity(activity));
+      if (activity.accessibility || activity.price) {
+        res.json(this.mapBoredActivityToActivity(activity));
+      }
+
+      res.json(activity);
     } catch (error) {
       logger.error('getActivity: failed to call the api');
       res.json({ error: 'Failed to query due to error in arguments' });

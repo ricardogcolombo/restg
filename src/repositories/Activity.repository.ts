@@ -13,12 +13,12 @@ class ActivityRepository {
 
   private setParam(name: string, key: string | number | undefined) {
     if (key === undefined || (typeof key === 'string' && key.length === 0)) return this;
-    logger.info(`setStrinParam ${name}`, key);
     if (this.lastUrlCharIsQueryStringSeparator()) {
       this.url = this.url + `${name}=${key}`;
     } else {
       this.url = this.url + `&${name}=${key}`;
     }
+
     return this;
   }
 
@@ -59,6 +59,10 @@ class ActivityRepository {
 
   reset() {
     this.url = '';
+  }
+
+  getUrl() {
+    return this.url;
   }
 
   async getActivity() {
