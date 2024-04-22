@@ -46,7 +46,7 @@ describe('ActivityUrlParametersBuilder', () => {
 
   describe('setParticipants', () => {
     test('should set participants in URL', () => {
-      const participants = '2';
+      const participants = 2;
       const url = builder.setParticipants(participants).getUrl();
       expect(url).toContain(`participants=${participants}`);
     });
@@ -55,16 +55,11 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setParticipants(undefined).getUrl();
       expect(url).not.toContain('participants');
     });
-
-    test('should not set participants if empty string', () => {
-      const url = builder.setParticipants('').getUrl();
-      expect(url).not.toContain('participants');
-    });
   });
 
   describe('setPrice', () => {
     test('should set price in URL', () => {
-      const price = '10';
+      const price = 10;
       const url = builder.setPrice(price).getUrl();
       expect(url).toContain(`price=${price}`);
     });
@@ -73,16 +68,11 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setPrice(undefined).getUrl();
       expect(url).not.toContain('price');
     });
-
-    test('should not set price if empty string', () => {
-      const url = builder.setPrice('').getUrl();
-      expect(url).not.toContain('price');
-    });
   });
 
   describe('setMinPrice', () => {
     test('should set min price in URL', () => {
-      const minprice = '5';
+      const minprice = 5;
       const url = builder.setMinPrice(minprice).getUrl();
       expect(url).toContain(`minprice=${minprice}`);
     });
@@ -91,16 +81,11 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setMinPrice(undefined).getUrl();
       expect(url).not.toContain('minprice');
     });
-
-    test('should not set min price if empty string', () => {
-      const url = builder.setMinPrice('').getUrl();
-      expect(url).not.toContain('minprice');
-    });
   });
 
   describe('setMaxPrice', () => {
     test('should set max price in URL', () => {
-      const maxprice = '20';
+      const maxprice = 20;
       const url = builder.setMaxPrice(maxprice).getUrl();
       expect(url).toContain(`maxprice=${maxprice}`);
     });
@@ -109,16 +94,11 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setMaxPrice(undefined).getUrl();
       expect(url).not.toContain('maxprice');
     });
-
-    test('should not set max price if empty string', () => {
-      const url = builder.setMaxPrice('').getUrl();
-      expect(url).not.toContain('maxprice');
-    });
   });
 
   describe('setAccessibility', () => {
     test('should set accessibility in URL', () => {
-      const accessibility = 'easy';
+      const accessibility = 12;
       const url = builder.setAccessibility(accessibility).getUrl();
       expect(url).toContain(`accessibility=${accessibility}`);
     });
@@ -127,16 +107,11 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setAccessibility(undefined).getUrl();
       expect(url).not.toContain('accessibility');
     });
-
-    test('should not set accessibility if empty string', () => {
-      const url = builder.setAccessibility('').getUrl();
-      expect(url).not.toContain('accessibility');
-    });
   });
 
   describe('setMaxAccessibility', () => {
     test('should set max accessibility in URL', () => {
-      const maxaccessibility = 'high';
+      const maxaccessibility = 12;
       const url = builder.setMaxAccessibility(maxaccessibility).getUrl();
       expect(url).toContain(`maxaccessibility=${maxaccessibility}`);
     });
@@ -145,27 +120,17 @@ describe('ActivityUrlParametersBuilder', () => {
       const url = builder.setMaxAccessibility(undefined).getUrl();
       expect(url).not.toContain('maxaccessibility');
     });
-
-    test('should not set max accessibility if empty string', () => {
-      const url = builder.setMaxAccessibility('').getUrl();
-      expect(url).not.toContain('maxaccessibility');
-    });
   });
 
   describe('setMinAccessibility', () => {
     test('should set min accessibility in URL', () => {
-      const minaccessibility = 'medium';
+      const minaccessibility = 12;
       const url = builder.setMinAccessibility(minaccessibility).getUrl();
       expect(url).toContain(`minaccessibility=${minaccessibility}`);
     });
 
     test('should not set min accessibility if undefined', () => {
       const url = builder.setMinAccessibility(undefined).getUrl();
-      expect(url).not.toContain('minaccessibility');
-    });
-
-    test('should not set min accessibility if empty string', () => {
-      const url = builder.setMinAccessibility('').getUrl();
       expect(url).not.toContain('minaccessibility');
     });
   });
@@ -175,13 +140,13 @@ describe('ActivityUrlParametersBuilder', () => {
     const url = builder
       .setKey('exampleKey')
       .setType('education')
-      .setParticipants('1')
-      .setPrice('0')
-      .setMinPrice('0')
-      .setMaxPrice('1')
-      .setAccessibility('0.1')
-      .setMaxAccessibility('0.5')
-      .setMinAccessibility('0')
+      .setParticipants(1)
+      .setPrice(0)
+      .setMinPrice(0)
+      .setMaxPrice(1)
+      .setAccessibility(0.1)
+      .setMaxAccessibility(0.5)
+      .setMinAccessibility(0)
       .getUrl();
 
     expect(url).toBe(

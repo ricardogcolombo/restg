@@ -1,4 +1,4 @@
-import Logger from '../helpers/Logger';
+import logger from '../helper/logger';
 
 class ActivityRepository {
   private url: string;
@@ -10,107 +10,64 @@ class ActivityRepository {
   private lastUrlCharIsQueryStringSeparator() {
     return this.url[this.url.length - 1] === '?';
   }
-  setKey(key: string | undefined) {
-    if (!key) return this;
+
+  private setParam(name: string, key: string | number | undefined) {
+    if (key === undefined || (typeof key === 'string' && key.length === 0)) return this;
+    logger.info(`setStrinParam ${name}`, key);
     if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `key=${key}`;
+      this.url = this.url + `${name}=${key}`;
     } else {
-      this.url = this.url + `&key=${key}`;
+      this.url = this.url + `&${name}=${key}`;
     }
     return this;
+  }
+
+  setKey(key: string | undefined) {
+    return this.setParam('key', key);
   }
 
   setType(type: string | undefined) {
-    if (!type) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `type=${type}`;
-    } else {
-      this.url = this.url + `&type=${type}`;
-    }
-
-    return this;
-  }
-  setParticipants(participants: string | undefined) {
-    if (!participants) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `participants=${participants}`;
-    } else {
-      this.url = this.url + `&participants=${participants}`;
-    }
-
-    return this;
-  }
-  setPrice(price: string | undefined) {
-    if (!price) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `price=${price}`;
-    } else {
-      this.url = this.url + `&price=${price}`;
-    }
-
-    return this;
-  }
-  setMinPrice(minprice: string | undefined) {
-    if (!minprice) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `minprice=${minprice}`;
-    } else {
-      this.url = this.url + `&minprice=${minprice}`;
-    }
-
-    return this;
-  }
-  setMaxPrice(maxprice: string | undefined) {
-    if (!maxprice) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `maxprice=${maxprice}`;
-    } else {
-      this.url = this.url + `&maxprice=${maxprice}`;
-    }
-    return this;
+    return this.setParam('type', type);
   }
 
-  setAccessibility(accessibility: string | undefined) {
-    if (!accessibility) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `accessibility=${accessibility}`;
-    } else {
-      this.url = this.url + `&accessibility=${accessibility}`;
-    }
-    return this;
+  setParticipants(participants: number | undefined) {
+    return this.setParam('participants', participants);
   }
-  setMaxAccessibility(maxaccessibility: string | undefined) {
-    if (!maxaccessibility) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `maxaccessibility=${maxaccessibility}`;
-    } else {
-      this.url = this.url + `&maxaccessibility=${maxaccessibility}`;
-    }
 
-    return this;
+  setPrice(price: number | undefined) {
+    return this.setParam('price', price);
   }
-  setMinAccessibility(minaccessibility: string | undefined) {
-    if (!minaccessibility) return this;
-    if (this.lastUrlCharIsQueryStringSeparator()) {
-      this.url = this.url + `minaccessibility=${minaccessibility}`;
-    } else {
-      this.url = this.url + `&minaccessibility=${minaccessibility}`;
-    }
-    return this;
+
+  setMinPrice(minprice: number | undefined) {
+    return this.setParam('minprice', minprice);
   }
-  getUrl() {
-    return this.url;
+
+  setMaxPrice(maxprice: number | undefined) {
+    return this.setParam('maxprice', maxprice);
   }
+
+  setAccessibility(accessibility: number | undefined) {
+    return this.setParam('accessibility', accessibility);
+  }
+  setMinAccessibility(minaccessibility: number | undefined) {
+    return this.setParam('minaccessibility', minaccessibility);
+  }
+
+  setMaxAccessibility(maxaccessibility: number | undefined) {
+    return this.setParam('maxaccessibility', maxaccessibility);
+  }
+
   reset() {
     this.url = '';
   }
+
   async getActivity() {
     let activity;
     try {
-      Logger.info(`calling ${this.url}`);
+      logger.info(`calling ${this.url}`);
       activity = await fetch(this.url).then((response) => response.json());
     } catch (error) {
-      Logger.error('Failed to fetch from boredapi/activity');
+      logger.error('Failed to fetch from boredapi/activity');
       throw error;
     }
 

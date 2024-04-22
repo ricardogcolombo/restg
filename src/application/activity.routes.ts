@@ -1,11 +1,11 @@
 import { Router, Express } from 'express';
-import Logger from '../helpers/Logger';
 import { getActivityProvider } from '../domain/providers/activity.provider';
+import logger from '../helper/logger';
 
 const router = Router();
 
 const badRequestError = () => {
-  Logger.error('Bad Request');
+  logger.error('Bad Request');
   throw new Error('Bad request');
 };
 
