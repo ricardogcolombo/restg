@@ -26,6 +26,7 @@ class ActivityProvider {
     } else {
       accessibilityLevel = AccessibilityLevel.LOW;
     }
+
     return accessibilityLevel;
   }
 
@@ -39,6 +40,7 @@ class ActivityProvider {
     } else {
       priceLevel = PriceCategory.HIGH;
     }
+
     return priceLevel;
   }
 
@@ -101,14 +103,16 @@ class ActivityProvider {
 
       let activity = await activityRepository.getActivity();
 
-      if (activity.accessibility || activity.price) {
-        res.json(this.mapBoredActivityToActivity(activity));
+      if (activity.accessibility !== undefined && activity.price !== undefined) {
+        const mappedActivity = this.mapBoredActivityToActivity(activity);
+        res.json(mappedActivity);
+      } else {
+        res.json(activity);
       }
-
-      res.json(activity);
     } catch (error) {
       logger.error('getActivity: failed to call the api');
       res.json({ error: 'Failed to query due to error in arguments' });
+      return;
     }
   }
 }

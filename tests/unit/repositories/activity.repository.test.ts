@@ -1,4 +1,4 @@
-import { ActivityRepository } from '../../src/repositories/activity.repository';
+import { ActivityRepository } from '../../../src/repositories/activity.repository';
 
 describe('ActivityRepository', () => {
   let builder: ActivityRepository;

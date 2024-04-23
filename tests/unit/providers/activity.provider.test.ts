@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { ActivityProvider } from '../../src/domain/providers/activity.provider';
-import { ActivityRepository } from '../../src/repositories/activity.repository';
-import { AccessibilityLevel, PriceCategory } from '../../src/domain/entities/activity.entities';
-import logger from '../../src/helper/logger';
-import { BoredActivityFactory } from '../factories/activity.factory';
+import { ActivityProvider } from '../../../src/domain/providers/activity.provider';
+import { ActivityRepository } from '../../../src/repositories/activity.repository';
+import { AccessibilityLevel, PriceCategory } from '../../../src/domain/entities/activity.entities';
+import logger from '../../../src/helper/logger';
+import { BoredActivityFactory } from '../../factories/activity.factory';
 let mockGetActivity = jest.fn();
-jest.mock('../../src/repositories/activity.repository', () => ({
+jest.mock('../../../src/repositories/activity.repository', () => ({
   ActivityRepository: jest.fn().mockImplementation(() => ({
     setParam: jest.fn().mockReturnThis(),
     lastUrlCharIsQueryStringSeparator: jest.fn().mockImplementation(() => false),
@@ -21,7 +21,7 @@ jest.mock('../../src/repositories/activity.repository', () => ({
     getActivity: mockGetActivity
   }))
 }));
-jest.mock('../../src/helper/logger', () => ({
+jest.mock('../../../src/helper/logger', () => ({
   info: jest.fn(),
   error: jest.fn()
 }));
