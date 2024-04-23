@@ -6,7 +6,9 @@ import { attachActivityRoutes } from '../application/activity.routes';
 import rateLimitMiddleware from './middleware/rate-limit';
 
 const app: Express = express();
-app.use(rateLimitMiddleware);
+if (process.env.NODE_ENV === 'production') {
+  app.use(rateLimitMiddleware);
+}
 app.use(helmet());
 app.use(cors());
 app.use(morgan('common'));
