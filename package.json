@@ -7,8 +7,9 @@
     "test": "NOLOG=true NODE_ENV=development jest",
     "build": "npx tsc",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "dev": "./node_modules/nodemon/bin/nodemon.js",
-    "start": "NODE_ENV=production node build/index.js"
+    "dev": "NODE_ENV=development ./node_modules/nodemon/bin/nodemon.js",
+    "start": "NODE_ENV=development node build/index.js",
+    "start:production": "NODE_ENV=production node build/index.js"
   },
   "author": "",
   "license": "ISC",

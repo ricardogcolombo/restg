@@ -17,9 +17,11 @@ interface SaveProfileInput {
 
 class UsersRepository {
   private User;
+
   constructor() {
     this.User = mongoose.model('users', userSchema);
   }
+
   async saveProfile(input: SaveProfileInput): Promise<User> {
     logger.info('saveProfile', { input });
     await connectDB();
@@ -33,6 +35,5 @@ class UsersRepository {
     };
   }
 }
-const usersRepository = new UsersRepository();
 
-export { UsersRepository, usersRepository };
+export { UsersRepository };

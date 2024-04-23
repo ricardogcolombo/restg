@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { ActivityRepository } from '../../repositories/activity.repository';
 import { User, AccessibilityLevel, Activity, BoredActivity, PriceCategory } from '../entities/activity.entities';
 import logger from '../../helper/logger';
-import { usersRepository } from '../../repositories/users.repository';
+import { UsersRepository } from '../../repositories/users.repository';
 
 interface AllowedParams {
   key: string;
@@ -125,16 +125,16 @@ class ActivityProvider {
   }
 
   async postUserActivity(req: Request, res: Response, next: NextFunction) {
-    console.log(req.body);
+    const userRepository = new UsersRepository();
     let { name, accessibility, price } = req.body;
     logger.info('gpostUserActivity', { name, accessibility, price });
     logger.info(`here  ${name}`);
 
     const castedAccessibility = this.validateAndCastNumber(accessibility);
     const castedPrice = this.validateAndCastNumber(price);
-    //
+
     try {
-      this.user = await usersRepository.saveProfile({ name, accessibility, price });
+      this.user = await userRepository.saveProfile({ name, accessibility, price });
       res.json(this.user);
     } catch (err) {
       next(err);
