@@ -27,10 +27,12 @@
     "nodemon": "^3.1.0",
     "pino": "^8.20.0",
     "pino-pretty": "^11.0.0",
-    "supertest": "^6.3.4",
     "winston": "^3.13.0"
   },
   "devDependencies": {
+    "supertest": "^6.3.4",
+    "@types/cors": "^2.8.17",
+    "@types/faker": "^6.6.9",
     "@faker-js/faker": "^8.4.1",
     "@types/cors": "^2.8.17",
     "@types/mongoose": "^5.11.97",

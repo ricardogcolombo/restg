@@ -88,7 +88,7 @@ describe('ActivityProvider', () => {
         expect(logger.error).not.toHaveBeenCalled();
       });
 
-      it('should respond with LOW PRICE', async () => {
+      it('should respond with LOW PRICE in edge case', async () => {
         const boredActivity = BoredActivityFactory.build({ accessibility: 0.5, price: 0.5 - Number.EPSILON });
 
         const expectedMappedActivity = { ...boredActivity, accessibility: AccessibilityLevel.MEDIUM, price: PriceCategory.LOW };
