@@ -78,7 +78,7 @@ describe('ActivityProvider', () => {
         expect(logger.error).not.toHaveBeenCalled();
       });
 
-      it('should respond with LOW PRICE', async () => {
+      it('should respond with LOW PRICE in edge case', async () => {
         const mockBoredActivity = { type: 'education', activity: 'Learn something new', accessibility: 0.5, price: 0.5 - Number.EPSILON };
         const boredActivity = BoredActivityFactory.build({ accessibility: 0.5, price: 0.5 - Number.EPSILON });
 
@@ -140,7 +140,7 @@ describe('ActivityProvider', () => {
         expect(logger.error).not.toHaveBeenCalled();
       });
 
-      it('should respond with LOW PRICE', async () => {
+      it('should respond with MEDIUM Accessibility in 0.75', async () => {
         const mockBoredActivity = { type: 'education', activity: 'Learn something new', accessibility: 0.75, price: 0.4 };
         const boredActivity = BoredActivityFactory.build({ accessibility: 0.75, price: 0 });
 
@@ -155,7 +155,7 @@ describe('ActivityProvider', () => {
         expect(logger.error).not.toHaveBeenCalled();
       });
 
-      it('should respond with HIGH PRICE', async () => {
+      it('should respond with LOW Accessibility', async () => {
         const mockBoredActivity = { type: 'education', activity: 'Learn something new', accessibility: 0.75 + Number.EPSILON, price: 0 };
         const boredActivity = BoredActivityFactory.build({ accessibility: 0.75 + Number.EPSILON, price: 0 });
 
