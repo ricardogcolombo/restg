@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ActivityProvider } from '../../../src/domain/providers/activity.provider';
 import { ActivityRepository } from '../../../src/repositories/activity.repository';
 import { AccessibilityLevel, PriceCategory } from '../../../src/domain/entities/activity.entities';
@@ -30,6 +30,7 @@ describe('ActivityProvider', () => {
   let activityProvider: ActivityProvider;
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
+  let mockNext = jest.fn();
   let mockActivityRepository: jest.Mocked<ActivityRepository>;
 
   beforeEach(() => {
@@ -56,7 +57,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -71,7 +72,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -86,7 +87,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -101,7 +102,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -118,7 +119,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -133,7 +134,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -148,7 +149,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -163,7 +164,7 @@ describe('ActivityProvider', () => {
         mockGetActivity.mockResolvedValue(boredActivity);
 
         mockRequest.query = { accessibility: '0.5' };
-        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+        await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
         expect(mockResponse.json).toHaveBeenCalledWith(expectedMappedActivity);
         expect(logger.info).toHaveBeenCalled();
@@ -175,7 +176,7 @@ describe('ActivityProvider', () => {
       mockRequest.query = { key: 'key', type: 'type', participants: '2', price: 'price' }; // Invalid price
       const expectedErrorMessage = { error: 'Failed to query due to error in arguments' };
 
-      await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+      await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
       expect(mockResponse.json).toHaveBeenCalledWith(expectedErrorMessage);
       expect(logger.error).toHaveBeenCalled();
@@ -187,7 +188,7 @@ describe('ActivityProvider', () => {
       mockActivityRepository.getActivity.mockRejectedValue(mockError);
       const expectedErrorMessage = { error: 'Failed to query due to error in arguments' };
 
-      await activityProvider.getActivity(mockRequest as Request, mockResponse as Response);
+      await activityProvider.getActivity(mockRequest as Request, mockResponse as Response, mockNext as NextFunction);
 
       expect(mockResponse.json).toHaveBeenCalledWith(expectedErrorMessage);
       expect(logger.error).toHaveBeenCalled();
