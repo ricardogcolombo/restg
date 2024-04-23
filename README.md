@@ -1,3 +1,8 @@
+Project structure
+
+This is based in Hexagonal architecture. Avoiding the usage of injection tools like tsrynge for simplicity
+
+
 # Rest api
 
 Building a rest api that calls the bored api for get activity and map the accessibility and price to different levels based on a range.
