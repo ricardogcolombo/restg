@@ -1,8 +1,9 @@
-import { Request, Response, Handler } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 import { ActivityRepository } from '../../repositories/activity.repository';
-import { AccessibilityLevel, Activity, BoredActivity, PriceCategory } from '../entities/activity.entities';
+import { User, AccessibilityLevel, Activity, BoredActivity, PriceCategory } from '../entities/activity.entities';
 import logger from '../../helper/logger';
+import { UsersRepository } from '../../repositories/users.repository';
 
 interface AllowedParams {
   key: string;
@@ -17,6 +18,8 @@ interface AllowedParams {
 }
 
 class ActivityProvider {
+  private user: User | undefined;
+
   private mapBoredAccessibility(accessibility: number): string {
     let accessibilityLevel: string;
     if (accessibility <= 0.25) {
@@ -82,7 +85,7 @@ class ActivityProvider {
     };
   }
 
-  async getActivity(req: Request, res: Response) {
+  async getActivity(req: Request, res: Response, next: NextFunction) {
     logger.info(JSON.stringify(req.query));
     const activityRepository = new ActivityRepository();
 
@@ -94,12 +97,17 @@ class ActivityProvider {
         .setKey(key)
         .setType(type)
         .setParticipants(participants)
-        .setPrice(price)
         .setMinPrice(minprice)
         .setMaxPrice(maxprice)
-        .setAccessibility(accessibility)
         .setMaxAccessibility(maxaccessibility)
         .setMinAccessibility(minaccessibility);
+
+      if (this.user) {
+        logger.info('using user configuration');
+        activityRepository.setAccessibility(this.user.accessibility).setPrice(this.user.price);
+      } else {
+        activityRepository.setAccessibility(accessibility).setPrice(price);
+      }
 
       let activity = await activityRepository.getActivity();
 
@@ -115,11 +123,35 @@ class ActivityProvider {
       return;
     }
   }
+
+  async postUserActivity(req: Request, res: Response, next: NextFunction) {
+    const userRepository = new UsersRepository();
+    let { name, accessibility, price } = req.body;
+    logger.info('gpostUserActivity', { name, accessibility, price });
+    logger.info(`here  ${name}`);
+
+    const castedAccessibility = this.validateAndCastNumber(accessibility);
+    const castedPrice = this.validateAndCastNumber(price);
+
+    try {
+      this.user = await userRepository.saveProfile({ name, accessibility, price });
+      res.json(this.user);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 const provider = new ActivityProvider();
-const getActivityProvider = (req: Request, res: Response) => {
-  return provider.getActivity(req, res);
+
+// to fix later
+const getActivityProvider = (req: Request, res: Response, next: NextFunction) => {
+  return provider.getActivity(req, res, next);
 };
 
-export { ActivityProvider, getActivityProvider };
+// to fix later
+const postUserActivityProvider = (req: Request, res: Response, next: NextFunction) => {
+  return provider.postUserActivity(req, res, next);
+};
+
+export { provider, ActivityProvider, getActivityProvider, postUserActivityProvider };

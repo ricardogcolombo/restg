@@ -134,6 +134,7 @@ describe('ActivityRepository', () => {
       expect(url).not.toContain('minaccessibility');
     });
   });
+
   it('should build a valid URL with multiple parameters', () => {
     const builder = new ActivityRepository();
 

@@ -30,4 +30,10 @@ interface Activity {
   key: string;
 }
 
-export { Activity, BoredActivity, AccessibilityLevel, PriceCategory };
+interface User {
+  accessibility: number;
+  name: string;
+  price: number;
+}
+
+export { User, Activity, BoredActivity, AccessibilityLevel, PriceCategory };
